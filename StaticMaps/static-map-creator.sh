@@ -1,4 +1,9 @@
 #! /bin/bash
+
+
+#this script should be run at the end of the day. It creates a new static map using current datasource file
+#and updates all menus to include new map
+# it also clears the current data source file in the Live Maps section
 #get current date in YYYY-MM-DD format
 now_directory_name="$(date +'%Y-%m-%d')"
 now_link_name="$(date +'%B %d, %Y')"
@@ -51,6 +56,8 @@ done
 
 #insert link into live maps
 cd ../LiveMaps
+rm datasource.txt
+touch datasource.txt
 find . -type f -name "index.html" -print0 | while read -r -d '' file
 do
     n=($(awk "/<\!-- Collect the nav links, forms, and other content for toggling -->/","/<\/ul>/{print NR}" $file))
