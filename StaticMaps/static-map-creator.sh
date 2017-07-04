@@ -56,8 +56,7 @@ done
 
 #insert link into live maps
 cd ../LiveMaps
-rm datasource.txt
-touch datasource.txt
+
 find . -type f -name "index.html" -print0 | while read -r -d '' file
 do
     n=($(awk "/<\!-- Collect the nav links, forms, and other content for toggling -->/","/<\/ul>/{print NR}" $file))
