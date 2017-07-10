@@ -52,7 +52,8 @@ j = 1
 function initializeMap() {                                    //Set initial conditions of map
   var map = L.map('map');    //Center the map to these coordinates originally; set zoom
   var mapMarkers = [];
-
+  var pearl = L.marker([43.648349, -79.386162])
+  var walton = L.marker([43.657632, -79.385199])
   //Call the map tile to be used. This is from 'mapbox'
 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 		maxZoom: 25,
@@ -62,7 +63,8 @@ function initializeMap() {                                    //Set initial cond
 		id: 'mapbox.streets'
 	}).addTo(map);                     // Add the tile to the map
   L.control.scale().addTo(map);            // Add scale to map
-
+  pearl.addTo(map).bindPopup("Pearl Power Station");
+  walton.addTo(map).bindPopup("Walton Steam Plant");
 
 
 //Initialize legend by creating div element
