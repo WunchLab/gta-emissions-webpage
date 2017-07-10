@@ -32,7 +32,7 @@ legendDict = {
     "Carbon_Monoxide": "CO (ppm)",
     "Methane": "Methane (ppm)",
     "Temperature": "Temperature ("+ txto.sup() + "C)",
-    "Water_Vapour": "H " +  txt2.sub() + "O (ppm)"
+    "Water_Vapour": "H" +  txt2.sub() + "O (ppm)"
 }
 var path = window.location.pathname;
 var variable = path.split("/").slice(-2, -1)[0];
@@ -151,8 +151,7 @@ legend.update = function(dataArray) {
   div.innerHTML += "<b>" + legendDict[variable] + "</b><br>"
   for (var i = 0; i < intervals; i++) {
         div.innerHTML +=
-              '<i style="background:' + getColor(grades[i], dataArray) + '"></i> ' +
-              grades[i] + (grades[i + 1] ? '<br>' : '+');
+              '<i style="background:' + getColor(grades[i], dataArray) + '"></i> ' + grades[i] + (grades[i + 1] ? '<br>' : '');
              
 
     }      
@@ -228,7 +227,7 @@ function processData(map, mapMarkers, data) {                               //  
           
         }
 
-        if (mapMarkers[i] && mapMarkers[i][1] instanceof L.CircleMarker) {
+        if (mapMarkers[i] && mapMarkers[i][1] instanceof L.circle) {
           map.removeLayer(mapMarkers[i][1]);
         }
       }
@@ -240,7 +239,7 @@ function processData(map, mapMarkers, data) {                               //  
           map.removeLayer(mapMarkers[i - startingIndex][0]);
         }
 
-        if (mapMarkers[i - startingIndex] && mapMarkers[i - startingIndex][1] instanceof L.CircleMarker) {
+        if (mapMarkers[i - startingIndex] && mapMarkers[i - startingIndex][1] instanceof L.circle) {
           map.removeLayer(mapMarkers[i - startingIndex][1]);
         }
 
@@ -270,9 +269,9 @@ function processData(map, mapMarkers, data) {                               //  
           rotationAngle: windDirection
         });
 
-        var circleMarker = new L.circleMarker([latitude, longitude], {                     //  We Create a marker positioned and colored corresponding to the data passed
+        var circleMarker = new L.circle([latitude, longitude], {                     //  We Create a marker positioned and colored corresponding to the data passed
           color: getColor(pltVar, dataArray),                                                            // from datasource.txt.
-          radius: 9,
+          radius: 15,
           opacity: 0.9,
           fillOpacity: 0.9
           }).bindPopup(
@@ -289,8 +288,9 @@ function processData(map, mapMarkers, data) {                               //  
         mapMarkers[i - startingIndex] = [];
         mapMarkers[i - startingIndex][0] = arrowMarker;
         mapMarkers[i - startingIndex][1] = circleMarker;
-
-        map.addLayer(mapMarkers[i - startingIndex][0]);
+        if (plotWind() === true) {
+          map.addLayer(mapMarkers[i - startingIndex][0]);
+        }
         if (plotWind() != true) {
           map.addLayer(mapMarkers[i - startingIndex][1]);
         }
