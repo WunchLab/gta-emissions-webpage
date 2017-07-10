@@ -10,12 +10,12 @@ function plotWind() {
 // Determine which variable the map will plot
 function getVar(pressure, CO2, CO, CH4, temperature, H2O) {
   var varDict = {
-    "Air Pressure": pressure,
-    "Carbon Dioxide": CO2,
-    "Carbon Monoxide": CO,
+    "Air_Pressure": pressure,
+    "Carbon_Dioxide": CO2,
+    "Carbon_Monoxide": CO,
     "Methane": CH4,
     "Temperature": temperature,
-    "Water Vapour": H2O
+    "Water_Vapour": H2O
   };
   var path = window.location.pathname;
   var variable = path.split("/").slice(-2, -1)[0];
@@ -27,12 +27,12 @@ function getVar(pressure, CO2, CO, CH4, temperature, H2O) {
 var txt2 = "2";
 var txto = "o";
 legendDict = {
-    "Air Pressure": "Pressure (hPa)",
-    "Carbon Dioxide": "CO" + txt2.sub() + " (ppm)",
-    "Carbon Monoxide": "CO (ppm)",
+    "Air_Pressure": "Pressure (hPa)",
+    "Carbon_Dioxide": "CO" + txt2.sub() + " (ppm)",
+    "Carbon_Monoxide": "CO (ppm)",
     "Methane": "Methane (ppm)",
     "Temperature": "Temperature ("+ txto.sup() + "C)",
-    "Water Vapour": "H " +  txt2.sub() + "O (ppm)"
+    "Water_Vapour": "H " +  txt2.sub() + "O (ppm)"
 }
 var path = window.location.pathname;
 var variable = path.split("/").slice(-2, -1)[0];
@@ -247,7 +247,7 @@ function processData(map, mapMarkers, data) {
           
         }
 
-        if (mapMarkers[i] && mapMarkers[i][1] instanceof L.Circle) {
+        if (mapMarkers[i] && mapMarkers[i][1] instanceof L.CircleMarker) {
           map.removeLayer(mapMarkers[i][1]);
         }
       }
@@ -259,7 +259,7 @@ function processData(map, mapMarkers, data) {
           map.removeLayer(mapMarkers[i - startingIndex][0]);
         }
 
-        if (mapMarkers[i - startingIndex] && mapMarkers[i - startingIndex][1] instanceof L.Circle) {
+        if (mapMarkers[i - startingIndex] && mapMarkers[i - startingIndex][1] instanceof L.CircleMarker) {
           map.removeLayer(mapMarkers[i - startingIndex][1]);
         }
      
@@ -289,9 +289,9 @@ function processData(map, mapMarkers, data) {
            rotationAngle: windDirection + 180
         });
 
-        var circleMarker = new L.circle([latitude, longitude], {                     //  We Create a marker positioned and colored corresponding to the data passed
+        var circleMarker = new L.circleMarker([latitude, longitude], {                     //  We Create a marker positioned and colored corresponding to the data passed
           color: getColor(pltVar, dataArray),                                                            // from datasource.txt.
-          radius: 15,
+          radius: 5,
           opacity: 0.9,
           fillOpacity: 0.9
           }).bindPopup(
