@@ -33,13 +33,13 @@ legend.onAdd = function (map) {
 legend.addTo(map);
 
 
-  //Define a Function which will poll data from 'datasource.txt'
+  //Define a Function which will poll data from 'data_record_2017-07-10.txt'
   (function pollDataSource() {
 //    setTimeout(function() {
       $.ajax({                                    // This block does the bulk of the work:
-        url: "../datasource.txt",     // "Ajax" tells the browser to perform these tasks
+        url: "../data_record_2017-07-10.txt",     // "Ajax" tells the browser to perform these tasks
         cache: false,                             // behind the scenes. If successful, the information
-        success: function(data) {                 // polled from datasource.txt is passed to the processData
+        success: function(data) {                 // polled from data_record_2017-07-10.txt is passed to the processData
           processData(map, mapMarkers, data);     // function.
         },
         error: function() {                       // If polling unsuccessful, return the following error
@@ -148,7 +148,7 @@ function getBounds(data) {
 return latLngArray ;
 };
 
-function processData(map, mapMarkers, data) {                               //  Here we define what happens to the data that got polled from datasource.txt.
+function processData(map, mapMarkers, data) {                               //  Here we define what happens to the data that got polled from data_record_2017-07-10.txt.
   var dataArray = getDataArray(data);
   if (map && mapMarkers && data) {
     div.innerHTML='';
@@ -185,7 +185,7 @@ function processData(map, mapMarkers, data) {                               //  
 
         var dataComponents = dataRows[i].split(",");                // Break up line i in datasource by commas,                                     
         var timeStamp = dataComponents[0];                          // call this the variable 'dataComponents'.
-        var latitude = dataComponents[1];                           // We set a variable for each parameter in datasource.txt.
+        var latitude = dataComponents[1];                           // We set a variable for each parameter in data_record_2017-07-10.txt.
         var longitude = dataComponents[2];
         var temperature = dataComponents[4];
         var windDirection = dataComponents[5];
@@ -209,7 +209,7 @@ function processData(map, mapMarkers, data) {                               //  
         });
 
         var circleMarker = new L.circleMarker([latitude, longitude], {                     //  We Create a marker positioned and colored corresponding to the data passed
-          color: getColor(CH4, dataArray),                                                            // from datasource.txt.
+          color: getColor(CH4, dataArray),                                                            // from data_record_2017-07-10.txt.
           radius: 9,
           opacity: 0.9,
           fillOpacity: 0.9

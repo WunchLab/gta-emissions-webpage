@@ -35,13 +35,13 @@ legend.onAdd = function (map) {
 
 legend.addTo(map);
 
-  //Define a Function which will poll data from 'datasource.txt'
+  //Define a Function which will poll data from 'data_record_2017-07-10.txt'
   (function pollDataSource() {
 //    setTimeout(function() {
       $.ajax({                        // This block does the bulk of the work:
-        url: "../datasource.txt",     // "Ajax" tells the browser to perform these tasks
+        url: "../data_record_2017-07-10.txt",     // "Ajax" tells the browser to perform these tasks
         cache: false,                 // behind the scenes. If successful, the information
-        success: function(data) {     // polled from datasource.txt is passed to the processData
+        success: function(data) {     // polled from data_record_2017-07-10.txt is passed to the processData
           processData(map, mapMarkers, data);     // function.
         },
         error: function() {           // If polling unsuccessful, return the following error
@@ -138,7 +138,7 @@ return latLngArray ;
 };
 
 
-function processData(map, mapMarkers, data) {                               //  Here we define what happens to the data that got polled from datasource.txt.
+function processData(map, mapMarkers, data) {                               //  Here we define what happens to the data that got polled from data_record_2017-07-10.txt.
   if (map && mapMarkers && data) {
     div.innerHTML='';
     if (legend === undefined){
@@ -171,12 +171,12 @@ function processData(map, mapMarkers, data) {                               //  
         if (mapMarkers[i - startingIndex] && mapMarkers[i - startingIndex][1] instanceof L.CircleMarker) {
           map.removeLayer(mapMarkers[i - startingIndex][1]);
         }
-//format of datasource.txt line format:
+//format of data_record_2017-07-10.txt line format:
 // time,lat,lon,alt,temp,wd,ws,pressure,hdop,lgr_time,ch4,ch4se,h2o,h2ose,co2,co2se,co,cose,ch4d,ch4dse,co2d,
 // co2dse,cod,codse,gasp,gaspse,t,tse,amb,ambse,rd1,rd1se,rd2,rd2se,avg time;        
         var dataComponents = dataRows[i].split(",");                // Break up line i in datasource by commas,                                     
         var timeStamp = dataComponents[0];                          // call this the variable 'dataComponents'.
-        var latitude = dataComponents[1];                           // We set a variable for each parameter in datasource.txt.
+        var latitude = dataComponents[1];                           // We set a variable for each parameter in data_record_2017-07-10.txt.
         var longitude = dataComponents[2];
         var temperature = dataComponents[4];
         var windDirection = dataComponents[5];
@@ -199,7 +199,7 @@ function processData(map, mapMarkers, data) {                               //  
         });
 
         var circleMarker = new L.circleMarker([latitude, longitude], {                      //  We Create a marker positioned and colored corresponding to the data passed
-          color: getColor(temperature, dataArray),                                          //  from datasource.txt.
+          color: getColor(temperature, dataArray),                                          //  from data_record_2017-07-10.txt.
           radius: 9,
           opacity: 0.9,
           fillOpacity: 0.9
