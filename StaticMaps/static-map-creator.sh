@@ -11,7 +11,8 @@ now_file_name="data_record_$(date +%Y-%m-%d).txt"
 
 #create directory with current date
 #TODO allow for custom directory names
-rm -r $now_directory_name
+#rm -r $now_directory_name
+#TODO instead of deleting existing directory, ask user if it should be removed.
 mkdir $now_directory_name
 
 #copy code template to new directory

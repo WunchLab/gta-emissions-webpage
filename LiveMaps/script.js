@@ -240,7 +240,7 @@ function processData(map, mapMarkers, data) {
     var startingIndex = 0;
     if (dataRows.length > 601 ) {                                            // Set the starting index of which lines to plot
       startingIndex = dataRows.length - 601;                                 // We always take the last x lines if there are more than x lines.
-    } else if (dataRows.length < 601 ) {                                    
+    } else if (dataRows.length < 601 ) {                                   
       for (i = dataRows.length - 1; i < 600; i++) {
         if (mapMarkers[i] && mapMarkers[i][0] instanceof L.Marker) {         // Remove any previous arrow markers 
           map.removeLayer(mapMarkers[i][0]);
