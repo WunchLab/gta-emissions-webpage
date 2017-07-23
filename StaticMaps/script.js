@@ -26,6 +26,7 @@ function getVar(pressure, CO2, CO, CH4, temperature, H2O) {
 // Get text to put in legend based on variable being plotted
 var txt2 = "2";
 var txto = "o";
+
 legendDict = {
     "Air_Pressure": "Pressure (hPa)",
     "Carbon_Dioxide": "CO" + txt2.sub() + " (ppm)",
@@ -38,6 +39,8 @@ var path = window.location.pathname;
 var variable = path.split("/").slice(-2, -1)[0];
 var date = path.split("/")[3];
 
+// Define now many points will be plotted
+var pltNum = 850;
 
 $(function() {
   initializeMap();
@@ -53,6 +56,9 @@ j = 1
 function initializeMap() {                                    //Set initial conditions of map
   var map = L.map('map');    //Center the map to these coordinates originally; set zoom
   var mapMarkers = [];
+  var pearl = L.marker([43.648349, -79.386162]);
+  var walton = L.marker([43.657632, -79.385199]);
+  var jfl = L.marker([43.643837, -79.355271]);
 
   //Call the map tile to be used. This is from 'mapbox'
 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
@@ -63,7 +69,11 @@ function initializeMap() {                                    //Set initial cond
 		id: 'mapbox.streets'
 	}).addTo(map);                     // Add the tile to the map
   L.control.scale().addTo(map);            // Add scale to map
-
+  
+  // Add two static popups
+  pearl.addTo(map).bindPopup("Pearl Power Station");
+  walton.addTo(map).bindPopup("Walton Steam Plant");
+  jfl.addTo(map).bindPopup("JFL solid waste transfer station");
 
 //Initialize legend by creating div element
 if (plotWind() != true) {
@@ -132,7 +142,7 @@ function scaleLength(d) {
   var max = 20.
   var min = 0.
   var delta = (max - min)
-  var x = ((d - min)/delta)*100
+  var x = ((d - min)/delta)*150
 
   return x ;
 }
@@ -160,8 +170,8 @@ legend.update = function(dataArray) {
 // Create an array of all values to be plotted
 function getDataArray(data) {
   var dataRows = data.replace(/\s/g, '').split(";");
-  if (dataRows.length > 601) {
-    startingIndex = dataRows.length - 601
+  if (dataRows.length > (pltNum + 1)) {
+    startingIndex = dataRows.length - (pltNum + 1)
   } else {
     startingIndex = 0
     }
@@ -188,8 +198,8 @@ return dataArray ;
 function getBounds(data) {
   var latLngArray = [];
   var dataRows = data.replace(/\s/g, '').split(";");
-  if (dataRows.length > 601) {
-    startingIndex = dataRows.length - 601
+  if (dataRows.length > (pltNum + 1)) {
+    startingIndex = dataRows.length - (pltNum + 1)
   } else {
     startingIndex = 0
     }
@@ -218,16 +228,16 @@ function processData(map, mapMarkers, data) {                               //  
     div.innerHTML="";    
     var dataRows = data.replace(/\s/g, '').split(";");
     var startingIndex = 0;
-    if (dataRows.length > 601 ) {
-      startingIndex = dataRows.length - 601;
-    } else if (dataRows.length < 601 ) {
-      for (i = dataRows.length - 1; i < 600; i++) {
+    if (dataRows.length > (pltNum + 1) ) {
+      startingIndex = dataRows.length - (pltNum + 1);
+    } else if (dataRows.length < (pltNum + 1 )) {
+      for (i = dataRows.length - 1; i < pltNum; i++) {
         if (mapMarkers[i] && mapMarkers[i][0] instanceof L.Marker) {
           map.removeLayer(mapMarkers[i][0]);
           
         }
 
-        if (mapMarkers[i] && mapMarkers[i][1] instanceof L.circle) {
+        if (mapMarkers[i] && mapMarkers[i][1] instanceof L.circleMarker) {
           map.removeLayer(mapMarkers[i][1]);
         }
       }
@@ -239,7 +249,7 @@ function processData(map, mapMarkers, data) {                               //  
           map.removeLayer(mapMarkers[i - startingIndex][0]);
         }
 
-        if (mapMarkers[i - startingIndex] && mapMarkers[i - startingIndex][1] instanceof L.circle) {
+        if (mapMarkers[i - startingIndex] && mapMarkers[i - startingIndex][1] instanceof L.circleMarker) {
           map.removeLayer(mapMarkers[i - startingIndex][1]);
         }
 
@@ -263,15 +273,15 @@ function processData(map, mapMarkers, data) {                               //  
             iconSize:     [50, scaleLength(windSpeed)],  // size of the icon [width,length]
             iconAnchor: [25, scaleLength(windSpeed)],    // Location on the icon which corresponts to it's actual position (pixels in x-y coordinates from top left)
             });
-
+        var pltTheta = parseFloat(windDirection) + 180;
         var arrowMarker = new L.marker([latitude, longitude], {
           icon: arrow_icon,
-          rotationAngle: windDirection
+          rotationAngle: pltTheta
         });
 
-        var circleMarker = new L.circle([latitude, longitude], {                     //  We Create a marker positioned and colored corresponding to the data passed
+        var circleMarker = new L.circleMarker([latitude, longitude], {                     //  We Create a marker positioned and colored corresponding to the data passed
           color: getColor(pltVar, dataArray),                                                            // from datasource.txt.
-          radius: 15,
+          radius: 5,
           opacity: 0.9,
           fillOpacity: 0.9
           }).bindPopup(
@@ -289,7 +299,9 @@ function processData(map, mapMarkers, data) {                               //  
         mapMarkers[i - startingIndex][0] = arrowMarker;
         mapMarkers[i - startingIndex][1] = circleMarker;
         if (plotWind() === true) {
-          map.addLayer(mapMarkers[i - startingIndex][0]);
+          if (isNaN(windDirection) === false && isNaN(windSpeed) === false) {
+            map.addLayer(mapMarkers[i - startingIndex][0]);
+          }
         }
         if (plotWind() != true) {
           map.addLayer(mapMarkers[i - startingIndex][1]);

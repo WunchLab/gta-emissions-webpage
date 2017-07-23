@@ -45,26 +45,32 @@ $(function() {
 
 //Define some Variables
 var dataArray = [];
+var pltNum = 200;                                      //Number of data points to be plotted
 legend = L.control({position: 'bottomright'}),
 div = L.DomUtil.create('div', 'info legend');
 j = 1
 
+  
 function initializeMap() {                                    //Set initial conditions of map
   var map = L.map('map');    //Center the map to these coordinates originally; set zoom
   var mapMarkers = [];
-  var pearl = L.marker([43.648349, -79.386162])
-  var walton = L.marker([43.657632, -79.385199])
+  var pearl = L.marker([43.648349, -79.386162]);
+  var walton = L.marker([43.657632, -79.385199]);
+  var jfl = L.marker([43.643837, -79.355271]);
   //Call the map tile to be used. This is from 'mapbox'
-	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-		maxZoom: 25,
-		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-			'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-			'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-		id: 'mapbox.streets'
-	}).addTo(map);                     // Add the tile to the map
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+                maxZoom: 25,
+                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+                        '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+                        'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+                id: 'mapbox.streets'
+        }).addTo(map);                     // Add the tile to the map
   L.control.scale().addTo(map);            // Add scale to map
+
+  // Add some static popups to the map
   pearl.addTo(map).bindPopup("Pearl Power Station");
   walton.addTo(map).bindPopup("Walton Steam Plant");
+  jfl.addTo(map).bindPopup("JFL Solid Waste Transfer Station");
 
 
 //Initialize legend by creating div element
@@ -178,8 +184,8 @@ legend.update = function(dataArray) {
 // Create an array of all values to be plotted
 function getDataArray(data) {
   var dataRows = data.replace(/\s/g, '').split(";");
-  if (dataRows.length > 601) {
-    startingIndex = dataRows.length - 601
+  if (dataRows.length > (pltNum + 1)) {
+    startingIndex = dataRows.length - (pltNum + 1)
   } else {
     startingIndex = 0
     }
@@ -206,8 +212,8 @@ return dataArray ;
 function getBounds(data) {
   var latLngArray = [];
   var dataRows = data.replace(/\s/g, '').split(";");
-  if (dataRows.length > 601) {
-    startingIndex = dataRows.length - 601
+  if (dataRows.length > (pltNum + 1)) {
+    startingIndex = dataRows.length - (pltNum + 1)
   } else {
     startingIndex = 0
     }
@@ -238,10 +244,10 @@ function processData(map, mapMarkers, data) {
     };
     var dataRows = data.replace(/\s/g, '').split(";");
     var startingIndex = 0;
-    if (dataRows.length > 601 ) {                                            // Set the starting index of which lines to plot
-      startingIndex = dataRows.length - 601;                                 // We always take the last x lines if there are more than x lines.
-    } else if (dataRows.length < 601 ) {                                   
-      for (i = dataRows.length - 1; i < 600; i++) {
+    if (dataRows.length > (pltNum + 1) ) {                                            // Set the starting index of which lines to plot
+      startingIndex = dataRows.length - (pltNum + 1);                                 // We always take the last x lines if there are more than x lines.
+    } else if (dataRows.length < (pltNum + 1)) {                                   
+      for (i = dataRows.length - 1; i < pltNum; i++) {
         if (mapMarkers[i] && mapMarkers[i][0] instanceof L.Marker) {         // Remove any previous arrow markers 
           map.removeLayer(mapMarkers[i][0]);
           
@@ -286,7 +292,7 @@ function processData(map, mapMarkers, data) {
 
         var arrowMarker = new L.marker([latitude, longitude], {
           icon: arrow_icon,
-           rotationAngle: windDirection + 180
+           rotationAngle: (parseFloat(windDirection) + 180)
         });
 
         var circleMarker = new L.circleMarker([latitude, longitude], {                     //  We Create a marker positioned and colored corresponding to the data passed
@@ -310,7 +316,9 @@ function processData(map, mapMarkers, data) {
         mapMarkers[i - startingIndex][1] = circleMarker;
         
         if (plotWind() === true) {
-          map.addLayer(mapMarkers[i - startingIndex][0]);
+          if (isNaN(windDirection) === false && isNaN(windSpeed) === false){
+            map.addLayer(mapMarkers[i - startingIndex][0]);
+          }
         }
         if (plotWind() != true) {
           map.addLayer(mapMarkers[i - startingIndex][1]);

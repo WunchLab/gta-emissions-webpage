@@ -1,19 +1,32 @@
 #! /bin/bash
 
 
+if [ $# -lt 1 ]; then
+ echo "Usage static-map-creator.sh new_directory_name letter(optional)"
+ echo "Example:"
+ echo "static-map-creator.sh 2017-07-31 A"
+ exit 0
+fi
+
+
 #this script should be run at the end of the day. It creates a new static map using current datasource file
 #and updates all menus to include new map
 # it also clears the current data source file in the Live Maps section
-#get current date in YYYY-MM-DD format
-now_directory_name="$(date +'%Y-%m-%d')"
-now_link_name="$(date +'%B %d, %Y')"
-now_file_name="data_record_$(date +%Y-%m-%d).txt"
+#get current date in YYYY-MM-DD format 
+now_directory_name=$1$2
+now_link_name=$(date -d "$1" "+%B %d, %Y")" "$2
+now_file_name="data_record_"$now_directory_name".txt"
 
 #create directory with current date
 #TODO allow for custom directory names
 #rm -r $now_directory_name
 #TODO instead of deleting existing directory, ask user if it should be removed.
-mkdir $now_directory_name
+if [ -d "$1""$2" ]; then
+  echo "Directory $1$2 already exists. Please delete that directory or provide a different directory name."
+  exit 0
+else
+  mkdir $now_directory_name
+fi
 
 #copy code template to new directory
 cp -r code-template/* $now_directory_name/
