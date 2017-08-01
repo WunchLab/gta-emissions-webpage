@@ -40,7 +40,7 @@ var variable = path.split("/").slice(-2, -1)[0];
 var date = path.split("/")[3];
 
 // Define now many points will be plotted
-var pltNum = 850;
+var pltNum = 10000;
 
 $(function() {
   initializeMap();
@@ -58,7 +58,7 @@ function initializeMap() {                                    //Set initial cond
   var mapMarkers = [];
   var pearl = L.marker([43.648349, -79.386162]);
   var walton = L.marker([43.657632, -79.385199]);
-  var jfl = L.marker([43.643837, -79.355271]);
+  var gfl = L.marker([43.643837, -79.355271]);
 
   //Call the map tile to be used. This is from 'mapbox'
 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
@@ -73,7 +73,7 @@ function initializeMap() {                                    //Set initial cond
   // Add two static popups
   pearl.addTo(map).bindPopup("Pearl Power Station");
   walton.addTo(map).bindPopup("Walton Steam Plant");
-  jfl.addTo(map).bindPopup("JFL solid waste transfer station");
+  gfl.addTo(map).bindPopup("GFL solid waste transfer station");
 
 //Initialize legend by creating div element
 if (plotWind() != true) {
@@ -122,17 +122,37 @@ function getColor(d, array) {
   if (d === NaN){
     color = 'grey'
   }
+  
+  var path = window.location.pathname;
+  var variable = path.split("/").slice(-2, -1)[0];
+  var current_date = new Date((path.split("/")[3]).substring(0,10));
+  var current_time = current_date.getTime();
+  var end_bicycle = 1500422400000;
+
   if (array.length > 1){
     var max = Math.max.apply(Math, dataArray)
     var min = Math.min.apply(Math, dataArray)
+
+    if (current_time > end_bicycle) {
+      if (variable === "Methane") {
+        var max = 2.50,
+            min = 1.87;
+      }
+    }
     var delta = (max - min)
     var x = ((d - min)/delta)
     var r = Math.floor(x * 255.)
     var g = 0
     var b = 255. - Math.floor(x * 255.)
     color = "rgb("+r+" ,"+g+","+ b+")"
-  
-    } else if (array.length < 2){
+    if (d > max) {
+      color = "red"
+    }
+    if (d < min) {
+      color = "blue"
+    }
+ 
+  } else if (array.length < 2){
       color = 'white'
   }
   return color;
@@ -148,23 +168,42 @@ function scaleLength(d) {
 }
 
 legend.update = function(dataArray) {
-        grades = [],
-        intervals = 8,
-        gradeInterval = round((Math.max.apply(Math, dataArray) - Math.min.apply(Math, dataArray))/intervals, 3),
+  var grades = [],
+      intervals = 7,
+      max = Math.max.apply(Math, dataArray),
+      min = Math.min.apply(Math, dataArray),
+      path = window.location.pathname,
+      variable = path.split("/").slice(-2, -1)[0],
+      current_date = new Date((path.split("/")[3]).substring(0,10)),
+      current_time = current_date.getTime(),
+      end_bicycle = 1500422400000;
+
+  if (current_time > end_bicycle) {
+    if (variable === "Methane") {     
+       var max = 2.50,
+           min = 1.87;
+    }
+  }
+        gradeInterval = round((max - min)/intervals, 3),        
         labels = [];
         
   // Create an array of grades by incrementally adding to the min value
-  for (var i = 0; i < 8; i++) {
-      grades.push(round((Math.max.apply(Math, dataArray) - (gradeInterval * i)), 3));
+  for (var i = 0; i < intervals + 1; i++) {
+      grades.push(round((max - (gradeInterval * i)), 3));
     }
   // Add title to the legend
   div.innerHTML += "<b>" + legendDict[variable] + "</b><br>"
-  for (var i = 0; i < intervals; i++) {
-        div.innerHTML +=
-              '<i style="background:' + getColor(grades[i], dataArray) + '"></i> ' + grades[i] + (grades[i + 1] ? '<br>' : '');
-             
+  for (var i = 0; i < intervals + 1; i++) {
+    if (i === 0) {
+      div.innerHTML += 
+        '<i style="background:' + getColor(grades[i], dataArray) + '"></i> ' + grades[i] + " +<br>";
+    }
+    else {
+      div.innerHTML +=
+      '<i style="background:' + getColor(grades[i], dataArray) + '"></i> ' + grades[i] + (grades[i + 1] ? '<br>' : '');
+    }   
 
-    }      
+  }      
 }
 
 // Create an array of all values to be plotted
@@ -215,8 +254,11 @@ function getBounds(data) {
 return latLngArray ;
 };
 
-function processData(map, mapMarkers, data) {                               //  Here we define what happens to the data that got polled from datasource.txt.
+function processData(map, mapMarkers, data) {               //  Here we define what happens to the data that got polled from datasource.txt.
+  //reset the dataArray
+  var dataArray = []
   var dataArray = getDataArray(data);
+      
   if (map && mapMarkers && data) {
   // Add the legend if it is undefined and wipe its contents
     if (plotWind() != true) {
@@ -266,8 +308,9 @@ function processData(map, mapMarkers, data) {                               //  
         var H2O = dataComponents[13];
         var CO2 = dataComponents[11];
 	var CO = dataComponents[12];
-        var pltVar = getVar(pressure, CO2, CO, CH4, temperature, H2O);
 
+        var pltVar = getVar(pressure, CO2, CO, CH4, temperature, H2O);
+        console.log(pltVar)
         var arrow_icon = L.icon({
             iconUrl: 'https://cdn1.iconfinder.com/data/icons/simple-arrow/512/arrow_24-128.png',
             iconSize:     [50, scaleLength(windSpeed)],  // size of the icon [width,length]
@@ -312,7 +355,7 @@ function processData(map, mapMarkers, data) {                               //  
     }
     if (plotWind() != true) {
       if (dataArray.length > 0) 
-        {legend.update(dataArray)}
+        {legend.update(dataArray, pltVar)}
     };
     if (j === 1) {
       var bounds = L.latLngBounds(getBounds(data));
