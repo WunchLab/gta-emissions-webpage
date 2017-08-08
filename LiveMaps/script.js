@@ -54,9 +54,42 @@ j = 1
 function initializeMap() {                                    //Set initial conditions of map
   var map = L.map('map');    //Center the map to these coordinates originally; set zoom
   var mapMarkers = [];
-  var pearl = L.marker([43.648349, -79.386162]);
-  var walton = L.marker([43.657632, -79.385199]);
-  var gfl = L.marker([43.643837, -79.355271]);
+  L.marker([43.648349, -79.386162]).bindPopup("Pearl Power Station").addTo(map);
+  L.marker([43.657632, -79.385199]).addTo(map).bindPopup("Walton Steam Plant");
+  L.marker([43.643837, -79.355271]).addTo(map).bindPopup("GFL Solid Waste Transfer Station");
+  L.marker([43.838468,-80.017354]).bindPopup("Caledon Sanitary Landfill Site").addTo(map);
+  L.marker([43.9043,-79.9707]).bindPopup("Albion Landfill").addTo(map);
+  L.marker([43.5843,-79.7177]).bindPopup("Streetsville Landfill").addTo(map);
+  L.marker([43.602023,-79.695199]).bindPopup("Britannia Sanitary Landfill Site").addTo(map);
+  L.marker([43.5289,-79.6451]).bindPopup("North Sheridan Landfill Site").addTo(map);
+  L.marker([43.5334,-79.6397]).bindPopup("Newman Landfill Site").addTo(map);
+  L.marker([43.546995,-79.654902]).bindPopup("Erindale Park Landfill").addTo(map);
+  L.marker([43.578441,-79.648611]).bindPopup("Mavis Road Landfill").addTo(map);
+  L.marker([43.54643,-79.585319]).bindPopup("Saddington Park Landfill").addTo(map);
+  L.marker([43.551214,-79.587735]).bindPopup("Port Credit Memorial Park Landfill").addTo(map);
+  L.marker([43.577868,-79.546584]).bindPopup("GE Booth Wastewater Plant").addTo(map);
+  L.marker([43.633507,-79.479454]).bindPopup("Humber Bay Wastewater Plant").addTo(map);
+  L.marker([43.492389,-79.622815]).bindPopup("Mississauga Cement Plant").addTo(map);
+  L.marker([43.746466,-79.679979]).bindPopup("Goreway Power Station").addTo(map);
+  L.marker([43.799361,-79.84919]).bindPopup("Chinguacousy Landfill").addTo(map);
+  L.marker([43.49581,-79.62034]).bindPopup("Clarkson Wastewater Plant").addTo(map);
+  L.marker([43.5588168,-79.8524932]).bindPopup("Halton Hills Generating Station").addTo(map);
+  L.marker([43.8638027,-79.5013753]).bindPopup("Keele Valley Landfill").addTo(map);
+  L.marker([43.6590082,-79.3218899]).bindPopup("Ashbridges Bay Wastewater Plant").addTo(map);
+  L.marker([43.7625727,-79.5855149]).bindPopup("Thackeray Landfill").addTo(map);
+  L.marker([43.7879406,-79.4653635]).bindPopup("Connaught Campus").addTo(map);
+  L.marker([43.6494603,-79.3308377]).bindPopup("Portlands Energy Centre").addTo(map);
+  L.marker([43.82505,-79.16188]).bindPopup("Beare Road Landfill").addTo(map);
+  L.marker([43.925278,-78.835278]).bindPopup("Oshawa Landfill").addTo(map);
+  L.marker([43.868496,-79.100544]).bindPopup("Brock West Landfill").addTo(map);
+  L.marker([43.906087,-79.086437]).bindPopup("Brock Landfill").addTo(map);
+  L.marker([43.869833,-78.875172]).bindPopup("Oshawa Car Assembly Plant").addTo(map);
+  L.marker([43.85736,-78.893077]).bindPopup("Corbett Wastewater").addTo(map);
+  L.marker([43.859374,-78.902599]).bindPopup("Whitby Cogeneration Plant").addTo(map);
+  L.marker([43.854141,-78.908954]).bindPopup("Gerdau Ameristeel Whitby Mill").addTo(map);
+  L.marker([43.8843945,-78.6984568]).bindPopup("Bowmanville Cement Plant").addTo(map);
+
+
   //Call the map tile to be used. This is from 'mapbox'
         L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
                 maxZoom: 25,
@@ -66,11 +99,6 @@ function initializeMap() {                                    //Set initial cond
                 id: 'mapbox.streets'
         }).addTo(map);                     // Add the tile to the map
   L.control.scale().addTo(map);            // Add scale to map
-
-  // Add some static popups to the map
-  pearl.addTo(map).bindPopup("Pearl Power Station");
-  walton.addTo(map).bindPopup("Walton Steam Plant");
-  gfl.addTo(map).bindPopup("GFL Solid Waste Transfer Station");
 
 
 //Initialize legend by creating div element

@@ -1,27 +1,3 @@
-// Make a function that checks if we are plotting wind only
-function plotWind() {
-  var path = window.location.pathname;
-  var variable = path.split("/").slice(-2, -1)[0];
-  if (variable === "Wind") {
-    return true ;
-  }
-}
-
-// Determine which variable the map will plot
-function getVar(pressure, CO2, CO, CH4, temperature, H2O) {
-  var varDict = {
-    "Air_Pressure": pressure,
-    "Carbon_Dioxide": CO2,
-    "Carbon_Monoxide": CO,
-    "Methane": CH4,
-    "Temperature": temperature,
-    "Water_Vapour": H2O
-  };
-  var path = window.location.pathname;
-  var variable = path.split("/").slice(-2, -1)[0];
-  var gas = varDict[variable]; 
-  return gas; 
-}
 
 // Get text to put in legend based on variable being plotted
 var txt2 = "2";
@@ -35,8 +11,6 @@ legendDict = {
     "Temperature": "Temperature ("+ txto.sup() + "C)",
     "Water Vapour": "H" +  txt2.sub() + "O (ppm)"
 }
-var path = window.location.pathname;
-var variable = path.split("/").slice(-2, -1)[0];
 
 
 
@@ -45,7 +19,6 @@ $(function() {
 });
 
 //Define some Variables
-var dataArray = [];
 var pltNum = 120;                                      //Number of data points to be plotted
 legend = L.control({position: 'bottomright'}),
 div = L.DomUtil.create('div', 'info legend');
@@ -58,6 +31,39 @@ function initializeMap() {
   L.marker([43.648349, -79.386162]).bindPopup("Pearl power station").addTo(targets);
   L.marker([43.657632, -79.385199]).bindPopup("Walton Steam Plant").addTo(targets);
   L.marker([43.643837, -79.355271]).bindPopup("GFL Solid Waste Transfer Station").addTo(targets);
+  L.marker([43.838468,-80.017354]).bindPopup("Caledon Sanitary Landfill Site").addTo(targets);
+  L.marker([43.9043,-79.9707]).bindPopup("Albion Landfill").addTo(targets);
+  L.marker([43.5843,-79.7177]).bindPopup("Streetsville Landfill").addTo(targets);
+  L.marker([43.602023,-79.695199]).bindPopup("Britannia Sanitary Landfill Site").addTo(targets);
+  L.marker([43.5289,-79.6451]).bindPopup("North Sheridan Landfill Site").addTo(targets);
+  L.marker([43.5334,-79.6397]).bindPopup("Newman Landfill Site").addTo(targets);
+  L.marker([43.546995,-79.654902]).bindPopup("Erindale Park Landfill").addTo(targets);
+  L.marker([43.578441,-79.648611]).bindPopup("Mavis Road Landfill").addTo(targets);
+  L.marker([43.54643,-79.585319]).bindPopup("Saddington Park Landfill").addTo(targets);
+  L.marker([43.551214,-79.587735]).bindPopup("Port Credit Memorial Park Landfill").addTo(targets);
+  L.marker([43.577868,-79.546584]).bindPopup("GE Booth Wastewater Plant").addTo(targets);
+  L.marker([43.633507,-79.479454]).bindPopup("Humber Bay Wastewater Plant").addTo(targets);
+  L.marker([43.492389,-79.622815]).bindPopup("Mississauga Cement Plant").addTo(targets);
+  L.marker([43.746466,-79.679979]).bindPopup("Goreway Power Station").addTo(targets);
+  L.marker([43.799361,-79.84919]).bindPopup("Chinguacousy Landfill").addTo(targets);
+  L.marker([43.49581,-79.62034]).bindPopup("Clarkson Wastewater Plant").addTo(targets);
+  L.marker([43.5588168,-79.8524932]).bindPopup("Halton Hills Generating Station").addTo(targets);
+  L.marker([43.8638027,-79.5013753]).bindPopup("Keele Valley Landfill").addTo(targets);
+  L.marker([43.6590082,-79.3218899]).bindPopup("Ashbridges Bay Wastewater Plant").addTo(targets);
+  L.marker([43.7625727,-79.5855149]).bindPopup("Thackeray Landfill").addTo(targets);
+  L.marker([43.7879406,-79.4653635]).bindPopup("Connaught Campus").addTo(targets);
+  L.marker([43.6494603,-79.3308377]).bindPopup("Portlands Energy Centre").addTo(targets);
+  L.marker([43.82505,-79.16188]).bindPopup("Beare Road Landfill").addTo(targets);
+  L.marker([43.925278,-78.835278]).bindPopup("Oshawa Landfill").addTo(targets);
+  L.marker([43.868496,-79.100544]).bindPopup("Brock West Landfill").addTo(targets);
+  L.marker([43.906087,-79.086437]).bindPopup("Brock Landfill").addTo(targets);
+  L.marker([43.869833,-78.875172]).bindPopup("Oshawa Car Assembly Plant").addTo(targets);
+  L.marker([43.85736,-78.893077]).bindPopup("Corbett Wastewater").addTo(targets);
+  L.marker([43.859374,-78.902599]).bindPopup("Whitby Cogeneration Plant").addTo(targets);
+  L.marker([43.854141,-78.908954]).bindPopup("Gerdau Ameristeel Whitby Mill").addTo(targets);
+  L.marker([43.8843945,-78.6984568]).bindPopup("Bowmanville Cement Plant").addTo(targets);
+
+
 
   var CH4_markers = L.layerGroup(),
       CO2_markers = L.layerGroup(),
@@ -75,13 +81,20 @@ function initializeMap() {
       mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
 
   var grayscale   = L.tileLayer(mbUrl, {id: 'mapbox.light', attribution: mbAttr}),
-      streets  = L.tileLayer(mbUrl, {id: 'mapbox.streets',   attribution: mbAttr});
+      streets  = L.tileLayer(mbUrl, {id: 'mapbox.streets',   attribution: mbAttr}),
+      satellite = L.tileLayer(mbUrl, {id: "mapbox.satellite", attribution: mbAttr});
+//      terrain = L.tileLayer(mbUrl, {id: "mapbox.mapbox-outdoors-v10", attribution: mbAttr});
 
+
+  // Dictionary of base maps
   var baseMaps = {
       "Streets": streets,
-      "Grayscale": grayscale
+      "Grayscale": grayscale,
+      "Satellite": satellite
+//      "Terrain": terrain
   };
-
+  
+  // Dictionary of mutually exclusive base layers
   var baseLayers = {
       "Methane": CH4_markers,
       "Carbon Dioxide": CO2_markers,
@@ -92,47 +105,45 @@ function initializeMap() {
 
   };
   
+  // Make dictionary of overlays
   var overlays = {
      "Wind": wind_markers,
      "Targets": targets
   };
   
   
-   
+  // Initialize the map itself and the layers which appear by default
   var map = L.map('map', {
       layers: [streets, CH4_markers]
   });
 
-      
+  // Add the map tiles control and a scale to the map 
   L.control.layers(baseMaps).addTo(map);
-  //  L.control.layers(baseLayers, overlays).addTo(map);
   L.control.scale().addTo(map);
 
 
 
-//Initialize legend by creating div element
-if (plotWind() != true) {
+  //Initialize legend by creating div element
   var legend = L.control({position: 'bottomright'});
   legend.onAdd = function (map) {
     div.innerHTML = ''
     return div;
   };
   legend.addTo(map);
-}
 
+  $.ajax({                                     // Do one initial poll using ajax, that way the first dots show up 
+      url: "datasource.txt",                // as soon as the page is loaded. If successfull, we pass the polled
+      cache: false,                            // data to processdata(). Next, we do the same thing iteratively with
+      success: function(data) {                // a time delay between iterations.
+        processData(map, baseLayers, overlays, data);
+      },
+      error: function() {
+        alert("Error encountered while polling data source.");
+      },
+    });
 
   // Poll Data from datasource.txt
   (function pollDataSource() {
-    $.ajax({                                     // Do one initial poll using ajax, that way the first dots show up 
-        url: "datasource.txt",                // as soon as the page is loaded. If successfull, we pass the polled
-        cache: false,                            // data to processdata(). Next, we do the same thing iteratively with
-        success: function(data) {                // a time delay between iterations.
-          processData(map, baseLayers, overlays, data);     
-        },
-        error: function() {           
-          alert("Error encountered while polling data source.");
-        },      
-      });
     setTimeout(function() {
       j = j + 1
       $.ajax({                                    // This block does the bulk of the work:
@@ -146,7 +157,7 @@ if (plotWind() != true) {
         },
         complete: pollDataSource                  // This calls the pollDataSource function again,
       });                                         // leading to an infinite loop.
-    }, 15000);                                    // This is the argument passed to the 'setTimeout' function.
+    }, 20000);                                    // This is the argument passed to the 'setTimeout' function.
   })();                                           // It simply inserts a 1000 ms time delay before
 }                                                 // the next polling call
 
@@ -298,6 +309,7 @@ function getDataArray(data, dataArrays, baseLayers) {
       }
     }
   }
+
 return dataArrays ;
 };
 
@@ -310,7 +322,7 @@ function getBounds(data) {
   } else {
     startingIndex = 0
     }
-  for (i = startingIndex; i < dataRows.length - 1; i++) {
+  for (var i = startingIndex, l = dataRows.length - 1; i < l; i++) {
     var dataComponents = dataRows[i].split(",");
     var lat = dataComponents[1];
     var lon = dataComponents[2];
@@ -325,7 +337,6 @@ return latLngArray ;
 
 //  Here we define what happens to the data that got polled from datasource.txt.
 function processData(map, baseLayers, overlays, data) { 
-
   //reset the data arrays
   var dataArrays = {
     "Methane": [],
@@ -335,12 +346,20 @@ function processData(map, baseLayers, overlays, data) {
     "Temperature": [],
     "Pressure": []
   };
-                               
+  
+  // reset the base layers
+  for (var key in baseLayers) {
+    baseLayers[key].clearLayers();
+  }
+  
+  // reset the wind overlay
+  overlays["Wind"].clearLayers();
+
+  // Set get the data arrays for the next points to be plotted           
   var dataArrays = getDataArray(data, dataArrays, baseLayers);
 
   // Check that all required parameters exist
-  if (map && baseLayers && overlays && data) {
-
+  if (map && baseLayers && overlays && data) {  
     // Add the legend if it is undefined and wipe its contents
     if (legend === undefined){
       legend.addTo(map);
@@ -349,11 +368,11 @@ function processData(map, baseLayers, overlays, data) {
 
 
     // Make function to change legend when baselayer is changed
-    map.on({
+    map.on({ 
       baselayerchange: function(e) {
-      div.innerHTML=""
       for (var key in baseLayers) {
         if (e.name === key) {
+          div.innerHTML=""
           legend.update(dataArrays[key], key, baseLayers)
         }
       }
@@ -380,26 +399,33 @@ function processData(map, baseLayers, overlays, data) {
 
           for (i = dataRows.length - 1; i < pltNum; i++) {
             if (baseLayers[key][i] && baseLayers[key][i] instanceof L.CircleMarker) { 
-              map.removeLayer(baseLayers[key][i]);
+//              map.removeLayer(baseLayers[key][i]);
+              baseLayers[key][i - startingIndex].removeLayer(L.CircleMarker)
             }
             if (overlays["Wind"][i] && overlays["Wind"][i] instanceof L.Marker) {
               map.removeLayer(overlays["Wind"][i]);
+              baseLayers["Wind"][i - startingIndex].removeLayer(L.CircleMarker)
             }
           }
         }
       } 
     }   
 
-    for (i = startingIndex; i < dataRows.length - 1; i++) {
+    for (var i = startingIndex, l = dataRows.length - 1; i < l; i++) {
     // Remove all pre-existing markers and replace with updated markers
       try {
         for (var key in baseLayers) {
-          if (baseLayers[key][i - startingIndex] && baseLayers[key][i - startingIndex] instanceof L.Marker) {
-            map.removeLayer(baseLayers[key][i - startingIndex]);
+          if (baseLayers.hasOwnProperty(key)) {
+            if (baseLayers[key][i - startingIndex] && baseLayers[key][i - startingIndex] instanceof L.CircleMarker) {
+//              map.removeLayer(baseLayers[key][i - startingIndex]);
+                baseLayers[key][i - startingIndex].removeLayer(L.CircleMarker)
+                console.log(key, baseLayers[key])
+            }
           }
         }
         if (overlays["Wind"][i - startingIndex] && overlays["Wind"][i - startingIndex] instanceof L.Marker) {
-          map.removeLayer(overlays["Wind"][i - startingIndex]);
+//          map.removeLayer(overlays["Wind"][i - startingIndex]);
+            baseLayers[key][i - startingIndex].removeLayer(L.Marker)
         }
      
         var dataComponents = dataRows[i].split(",");                // Break up line i in datasource by commas,                                     
