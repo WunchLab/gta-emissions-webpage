@@ -20,7 +20,7 @@ $(function() {
 
 //Define some Variables
 var pltNum = 120;                                      //Number of data points to be plotted
-legend = L.control({position: 'bottomright'}),
+legend = L.control({position: 'bottomleft'}),
 div = L.DomUtil.create('div', 'info legend');
 j = 1
 
