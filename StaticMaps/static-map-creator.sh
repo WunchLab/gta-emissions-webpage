@@ -40,41 +40,46 @@ cd $now_directory_name
 mv datasource.txt $now_file_name
 egrep -lRZ "datasource\.txt" . |xargs -0 sed -i -e "s/datasource\.txt/$now_file_name/g"
 
+cd ../..
+find . -type f -name "navbar.html" -print0| while read -r -d '' file
+do n=($(awk '/function\ available/{print NR}' $file))
+   n_write=$(expr $n - 3); sed -i "${n_write}i \                               \"$now_directory_name\"" $file
+done
 
 
 
 #insert new link into menus on new Static Maps and set as active
 #new map
 #TODO allow for dynamic recreation of menus
-IFS=$'\n'
-find . -type f -name "index.html" -print0 | while read -r -d '' file
-do
-    n=($(awk "/<\!-- Collect the nav links, forms, and other content for toggling -->/","/<\/ul>/{print NR}" $file))
-    n_1=`expr ${n[-1]} - 1`
-    sed -i "${n_1}i \ \ \ \ \ \ \ \ \ \ \ \ <li class=\"active\"><a href=\"\.\.\/\.\.\/$now_directory_name\/Methane\">$now_link_name</a></li>" $file
-done
-
-#insert new link into menus on other Static Maps and set as inactive
-#new map
-cd ..
-find . -type f -name "index.html" -print0 | while read -r -d '' file
-do
-   test=${file:0:12}
-   if [[ "${test}" != \.\/$now_directory_name ]]
-       then 
-           n=($(awk "/<\!-- Collect the nav links, forms, and other content for toggling -->/","/<\/ul>/{print NR}" $file))
-           n_1=`expr ${n[-1]} - 1`
-           sed -i "${n_1}i \ \ \ \ \ \ \ \ \ \ \ \ <li><a href=\"\.\.\/\.\.\/$now_directory_name\/Methane\">$now_link_name</a></li>" $file
-    fi
-done
-
-#insert link into live maps
-cd ../LiveMaps
-
-find . -type f -name "index.html" -print0 | while read -r -d '' file
-do
-    n=($(awk "/<\!-- Collect the nav links, forms, and other content for toggling -->/","/<\/ul>/{print NR}" $file))
-    n_1=`expr ${n[-1]} - 1`    
-    sed -i "${n_1}i \ \ \ \ \ \ \ \ \ \ \ \ <li><a href=\"\.\.\/\.\.\/StaticMaps\/$now_directory_name\/Methane\">$now_link_name</a></li>" $file
-done
-
+#IFS=$'\n'
+#find . -type f -name "index.html" -print0 | while read -r -d '' file
+#do
+#    n=($(awk "/<\!-- Collect the nav links, forms, and other content for toggling -->/","/<\/ul>/{print NR}" $file))
+#    n_1=`expr ${n[-1]} - 1`
+#    sed -i "${n_1}i \ \ \ \ \ \ \ \ \ \ \ \ <li class=\"active\"><a href=\"\.\.\/\.\.\/$now_directory_name\/Methane\">$now_link_name</a></li>" $file
+#done
+#
+##insert new link into menus on other Static Maps and set as inactive
+##new map
+#cd ..
+#find . -type f -name "index.html" -print0 | while read -r -d '' file
+#do
+#   test=${file:0:12}
+#   if [[ "${test}" != \.\/$now_directory_name ]]
+#       then 
+#           n=($(awk "/<\!-- Collect the nav links, forms, and other content for toggling -->/","/<\/ul>/{print NR}" $file))
+#           n_1=`expr ${n[-1]} - 1`
+#           sed -i "${n_1}i \ \ \ \ \ \ \ \ \ \ \ \ <li><a href=\"\.\.\/\.\.\/$now_directory_name\/Methane\">$now_link_name</a></li>" $file
+#    fi
+#done
+#
+##insert link into live maps
+#cd ../LiveMaps
+#
+#find . -type f -name "index.html" -print0 | while read -r -d '' file
+#do
+#    n=($(awk "/<\!-- Collect the nav links, forms, and other content for toggling -->/","/<\/ul>/{print NR}" $file))
+#    n_1=`expr ${n[-1]} - 1`    
+#    sed -i "${n_1}i \ \ \ \ \ \ \ \ \ \ \ \ <li><a href=\"\.\.\/\.\.\/StaticMaps\/$now_directory_name\/Methane\">$now_link_name</a></li>" $file
+#done
+#
