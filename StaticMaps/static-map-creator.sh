@@ -29,7 +29,7 @@ else
 fi
 
 #copy code template to new directory
-cp -r code-template/* $now_directory_name/
+cp -r new-code-template/* $now_directory_name/
 
 # copy current datasource file to new directory
 cp ../LiveMaps/datasource.txt $now_directory_name
