@@ -29,7 +29,7 @@ else
 fi
 
 #copy code template to new directory
-cp -r new-code-template/* $now_directory_name/
+cp -r code-template/* $now_directory_name/
 
 # copy current datasource file to new directory
 cp ../LiveMaps/datasource.txt $now_directory_name
@@ -43,6 +43,10 @@ egrep -lRZ "datasource\.txt" . |xargs -0 sed -i -e "s/datasource\.txt/$now_file_
 cd ../..
 find . -type f -name "navbar.html" -print0| while read -r -d '' file
 do n=($(awk '/function\ available/{print NR}' $file))
-   n_write=$(expr $n - 3); sed -i "${n_write}i \                               \"$now_directory_name\"" $file
+   n_write=$(expr $n - 3)
+   n_above=$(expr $n - 4)
+   sed -i "${n_write}i \                             \"$now_directory_name\"" $file
+   sed -i "${n_above}s/$/\,/" $file
+
 done
 
