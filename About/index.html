@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+
+  <!-- Disable Browser caching -->
+    <meta name="description" content="Gas Concentration Measurement">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+  <!-- Improve mobile compatability -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta name="author" content="Colin Arrowsmith, Sajjan Heerah, Debra Wunch">
+
+    <title>About The GTA Emissions Project</title>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js" type="text/javascript"></script>
+    <script src="../LiveMaps/script/jquery.min.js"></script>
+    <script src="vendor/popper/popper.min.js"></script>
+    <script src="../LiveMaps/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <link href="../LiveMaps/bootstrap-3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/business-frontpage.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker3.min.css" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js"></script>
+  
+  </head>
+
+  <body>
+<!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+  <![endif]-->
+
+  <!-- Google Analytics -->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new 
+    Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+       ga('create', 'UA-103647824-1', 'auto');
+       ga('send', 'pageview');
+  </script>
+
+</head>
+
+
+<body>
+
+
+  <!--Navigation bar-->
+  <div id="nav-placeholder">
+
+  </div>
+
+  <script>
+  $(function(){
+    $("#nav-placeholder").load("navbar.html");
+  });
+  </script>
+  <!--end of Navigation bar-->
+
+    <!-- Header with Background Image -->
+    <header class="business-header">
+      <div class="container-fluid no-padding">
+        <div class="row">
+    <!--  <div class="col-lg-12">
+            <p class="navbar-text"><h1 class="display-3 text-center text-success mt-4">GTA Urban Emissions Project</h1>
+          </div> -->
+        </div>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <div class="container">
+
+      <div class="row">
+        <div class="col-sm-8">
+          <h2 class="mt-4">About the GTA Urban Emissions Project</h2>
+          <p>Our project aims to investigate methane gas emissions in the Greater Toronto Area (GTA). We are interested in quantifying the total methane emissions from the GTA as well as studying the nature of individual point sources throughout the GTA.</p>
+          <p>To do this, we use a combination of mobile in-situ gas measurements and remote sensing gas measurements. To make remote sensing measurements, we use two EM-27/SUN Fourrier Transform Infrared Sprectrometers (FTIRs) to measure the composition of the atmosphere above the GTA. </p>
+          <p>The in-situ measurements are made using a mobile laboratory consisting of a weather station and gas analyzer mounted on a bicycle trailer. We cycle around the city with the lab and update this website with real-time atmospheric data.</p>
+          
+          
+        </div>
+        <div class="col-sm-4">
+          <h2 class="mt-4">Contact Us</h2>
+          <address>
+            <strong>Debra Wunch</strong><br />
+            University of Toronto<br />
+            Department of Physics, Rm 707A<br />
+            60 St. George Street<br />
+            Toronto, ON  M5S 1A7<br />
+            Website: 
+            <a href="https://sites.physics.utoronto.ca/debrawunch">https://sites.physics.utoronto.ca/debrawunch</a><br/>
+            Phone: (416) 946-0408<br />
+            Fax: (416) 978-8905<br />
+            Email: 
+            <a href="mailto:dwunch@atmosp.physics.utoronto.ca">dwunch@atmosp.physics.utoronto.ca</a>
+
+        </div>
+      </div>
+      <hr />
+      <!-- /.row -->
+
+      <div class="row">
+        <div class="col-sm-4 my-4">
+          <div class="card">
+            <img class="card-img-top-fluid"  src="map-screenshot.jpg" alt="card image cap">
+            <div class="card-body">
+              <h4 class="card-title">Maps</h4>
+              <p class="card-text">Our data is collected, processed, and mapped in real time on our live map webpage so you can interactively see current air quality measurements in the GTA. We also have several static maps of previously collected data that you can see by selecting a day from the calendar dropdown menu at top of your screen.</p>
+            </div>
+            <div class="card-footer">
+              <a href="../LiveMaps/" class="btn btn-primary">Go to Live Map!</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4 my-4">
+          <div class="card">
+            <img class="card-img-top-fluid" src="lgr-top-view.JPG" alt="card image cap">
+            <div class="card-body">
+              <h4 class="card-title">Mobile Lab Instruments</h4>
+              <p class="card-text">To measure concentrations of greenhouse gases in the atmosphere, we use a portable LGR cavity ringdown spectrometer. To help with analyzing the data, we also measure several weather conditions as well as GPS position using an Airmar portable weather station.</p>
+            </div>
+            <div class="card-footer">
+              <a href="#" class="btn btn-primary">Find Out More!</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4 my-4">
+          <div class="card">
+            <img class="card-img-top" src="CH4_peak.png" alt="">
+            <div class="card-body">
+              <h4 class="card-title">Data</h4>
+              <p class="card-text">We are still working on creating a public database for our data. We hope to have this up soon.</p>
+            </div>
+            <div class="card-footer">
+              <a href="#" class="btn btn-primary disabled">Go to Data</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <!-- /.row -->
+
+    </div>
+    <!-- /.container -->
+    <hr/>
+  </body>
+
+</html>

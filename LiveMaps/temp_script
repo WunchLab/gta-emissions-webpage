@@ -1,0 +1,31 @@
+#! /bin/bash
+
+
+sed -i "s:../Carbon Dioxide:../Carbon_Dioxide:g" Wind/index.html
+sed -i "s:../Carbon Monoxide:../Carbon_Monoxide:g" Wind/index.html
+sed -i "s:../Air Pressure:../Air_Pressure:g" Wind/index.html
+sed -i "s:../Water Vapour:../Water_Vapour:g" Wind/index.html
+sed -i "s:../Carbon Dioxide:../Carbon_Dioxide:g" Methane/index.html
+sed -i "s:../Carbon Monoxide:../Carbon_Monoxide:g" Methane/index.html
+sed -i "s:../Air Pressure:../Air_Pressure:g" Methane/index.html
+sed -i "s:../Water Vapour:../Water_Vapour:g" Methane/index.html
+sed -i "s:../Carbon Dioxide:../Carbon_Dioxide:g" Carbon_Dioxide/index.html
+sed -i "s:../Carbon Monoxide:../Carbon_Monoxide:g" Carbon_Dioxide/index.html
+sed -i "s:../Air Pressure:../Air_Pressure:g" Carbon_Dioxide/index.html
+sed -i "s:../Water Vapour:../Water_Vapour:g" Carbon_Dioxide/index.html
+sed -i "s:../Carbon Dioxide:../Carbon_Dioxide:g" Carbon_Monoxide/index.html
+sed -i "s:../Carbon Monoxide:../Carbon_Monoxide:g" Carbon_Monoxide/index.html
+sed -i "s:../Air Pressure:../Air_Pressure:g" Carbon_Monoxide/index.html
+sed -i "s:../Water Vapour:../Water_Vapour:g" Carbon_Monoxide/index.html
+sed -i "s:../Carbon Dioxide:../Carbon_Dioxide:g" Water_Vapour/index.html
+sed -i "s:../Carbon Monoxide:../Carbon_Monoxide:g" Water_Vapour/index.html
+sed -i "s:../Air Pressure:../Air_Pressure:g" Water_Vapour/index.html
+sed -i "s:../Water Vapour:../Water_Vapour:g" Water_Vapour/index.html
+sed -i "s:../Carbon Dioxide:../Carbon_Dioxide:g" Temperature/index.html
+sed -i "s:../Carbon Monoxide:../Carbon_Monoxide:g" Temperature/index.html
+sed -i "s:../Air Pressure:../Air_Pressure:g" Temperature/index.html
+sed -i "s:../Water Vapour:../Water_Vapour:g" Temperature/index.html
+sed -i "s:../Carbon Dioxide:../Carbon_Dioxide:g" Air_Pressure/index.html
+sed -i "s:../Carbon Monoxide:../Carbon_Monoxide:g" Air_Pressure/index.html
+sed -i "s:../Air Pressure:../Air_Pressure:g" Air_Pressure/index.html
+sed -i "s:../Water Vapour:../Water_Vapour:g" Air_Pressure/index.html

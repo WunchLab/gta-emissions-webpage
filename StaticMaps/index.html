@@ -1,0 +1,88 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+<!-- Add title to tab -->
+  <title>Gas Concentration Measurement</title>
+
+<!-- Disable Browser caching -->
+  <meta name="description" content="Gas Concentration Measurement">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+
+<!-- Improve mobile compatability -->
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<!-- Tell browser to refer to the following files -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js" type="text/javascript"></script>
+  <script src="../script/jquery.min.js"></script>
+
+  <!-- loading bar --> 
+  <script src="../script/pace.min.js"></script>   
+  <link rel="stylesheet" href="../css/pace.css" /> 
+
+  <script src="../bootstrap-3.3.7/js/bootstrap.min.js"></script>
+  <link href="../bootstrap-3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../leaflet/leaflet.css" />
+  <link href="../css/style.css" rel="stylesheet" />
+  <script src="../leaflet/leaflet.js"></script>   
+  <script src="../leaflet/leaflet.rotatedMarker.js"></script>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.min.css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker3.min.css" />
+  <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.min.js"></script>
+
+  <script src="../script/test_script.js"></script>
+  
+
+  <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+  <![endif]-->
+
+  <!-- Google Analytics -->
+<!--  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new 
+    Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+       ga('create', 'UA-103647824-1', 'auto');
+       ga('send', 'pageview');
+  </script>   -->
+
+</head>
+
+
+<body>
+  <div id="map" class="map"></div>
+
+
+
+  <!--Navigation bar-->
+  <div id="nav-placeholder">
+
+  </div>
+
+  <script>
+  $(function(){
+    $("#nav-placeholder").load("../navbar.html");
+  });
+  </script>
+  <!--end of Navigation bar-->
+
+
+
+  <!-- Notification popup -->
+<!--  <div class="container">
+    <div class="alert alert-warning alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <p> Please Choose a map variable to see some live data.</p>
+      <i class="container" style="font-size:30px; vertical-align: middle;"></i>
+    </div>
+  </div> -->
+
+</body>
+</html>
