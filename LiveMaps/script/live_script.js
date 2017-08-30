@@ -19,9 +19,16 @@ $(function() {
 });
 
 //Define some Variables
-var pltNum = 120;                                      //Number of data points to be plotted
+var pltNum = 120;                 //Number of data points to be plotted
+// "last updated" control
+var info = L.control({position:'bottomright'});
+var div2 = L.DomUtil.create('div', 'info');
+
+// Legend control
 var legend = L.control({position:'bottomleft'});
 var div = L.DomUtil.create('div', 'info legend');
+
+// counter
 var j = 1;
 
   
@@ -211,16 +218,20 @@ function initializeMap() {
   // Initialize the map itself and the layers which appear by default
   var map = L.map('map', {
       layers: [streets, CH4_markers]
-  });
+  }).setView([43.660452, -79.398440], 13);
 
   // Add the map tiles control and a scale to the map 
   L.control.layers(baseMaps).addTo(map);
   L.control.scale().addTo(map);
 
-
+  //Initialize info control
+  info.onAdd = function(map) {
+    div2.innerHTML = ''
+    return div2;
+  }
+  info.addTo(map);
 
   //Initialize legend by creating div element
-//  var legend = L.control({position: 'bottomright'});
   legend.onAdd = function (map) {
     div.innerHTML = ''
     return div;
@@ -230,7 +241,9 @@ function initializeMap() {
   $.ajax({                                     // Do one initial poll using ajax, that way the first dots show up 
       url: "datasource.txt",                   // as soon as the page is loaded. If successfull, we pass the polled
       cache: false,                            // data to processdata(). Next, we do the same thing iteratively with
-      success: function(data) {                // a time delay between iterations.
+      success: function(data) {
+        if (data) {console.log("data is something")}
+        else {div2.innerHTML = "No measurements are currently being made."}
         processData(map, baseLayers, overlays, data);
       },
       error: function() {
@@ -247,6 +260,9 @@ function initializeMap() {
         cache: false,                             // behind the scenes. If successful, the information
         success: function(data) {                 // polled from datasource.txt is passed to the processData
           processData(map, baseLayers, overlays, data);     // function.
+          if (data) {console.log("data is something")}
+          else {div2.innerHTML = "No measurements are currently being made."}
+          processData(map, baseLayers, overlays, data);
         },
         error: function() {                       // If polling unsuccessful, return the following error
           console.log("Error encountered while polling data source.");
@@ -295,6 +311,9 @@ function sigma(array) {
 };
 
 function median(arr){
+  var arr = arr.map(function(num) {
+      return parseFloat(num)
+      });
   arr = arr.sort(function(a, b){ return a - b; });
   var i = arr.length / 2;
   return i % 1 == 0 ? (arr[i - 1] + arr[i]) / 2 : arr[Math.floor(i)];
@@ -342,6 +361,27 @@ function scaleLength(d) {
   return x ;
 };
 
+// Update the info control based on the last time in the datasource file
+info.update = function(data) {
+       
+        var dataRows = data.replace(/\s/g, '').split(";");
+        var l = dataRows.length;
+        var dataComponents, time;
+
+        for (var i = 2; l - i > -1; i++) {
+          
+          dataComponents = dataRows[l - i].split(",");
+          if (dataComponents[0] === "nan") {
+            continue;
+           } else {
+            time = dataComponents[0];
+            break;
+          }
+        };
+
+  div2.innerHTML = "<b>Last Updated At:</b><br>" + time.substring(0, 10) + "  " + time.substring(10, 18) + " UTC"
+}
+
 // Update the legend based on the max and min values
 legend.update = function(dataArray, variable, layer_group) {
         grades = [],
@@ -349,7 +389,6 @@ legend.update = function(dataArray, variable, layer_group) {
         min = Math.min.apply(Math, dataArray),
         max = (2 * parseFloat(sigma(dataArray))) + parseFloat(median(dataArray)),
         gradeInterval = round((max - min)/intervals, 2);
-        
   // Create an array of grades by incrementally adding to the min value
   // Start from the max and go down to the min in order to get larger values at top of legend
   for (var i = 0; i < intervals + 1; i++) {
@@ -461,6 +500,7 @@ function processData(map, baseLayers, overlays, data) {
       legend.addTo(map);
     }
     div.innerHTML="";
+    div2.innerHTML="";
 
 
     // Make function to change legend when baselayer is changed
@@ -481,6 +521,9 @@ function processData(map, baseLayers, overlays, data) {
         legend.update(dataArrays[key], key, baseLayers)
       }
     }
+
+    // Update the info control
+    info.update(data);
 
     var dataRows = data.replace(/\s/g, '').split(";");
     var startingIndex = 0;
@@ -515,7 +558,6 @@ function processData(map, baseLayers, overlays, data) {
             if (baseLayers[key][i - startingIndex] && baseLayers[key][i - startingIndex] instanceof L.CircleMarker) {
 //              map.removeLayer(baseLayers[key][i - startingIndex]);
                 baseLayers[key][i - startingIndex].removeLayer(L.CircleMarker)
-                console.log(key, baseLayers[key])
             }
           }
         }
@@ -596,6 +638,7 @@ function processData(map, baseLayers, overlays, data) {
     }
     
     j = j + 1;
-  }
+  } else {div2.innerHTML = "There are currently no live measurements"
+  }  //Make info control say something if datasource.txt is empty
 }
 
