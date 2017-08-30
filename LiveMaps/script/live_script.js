@@ -242,8 +242,9 @@ function initializeMap() {
       url: "datasource.txt",                   // as soon as the page is loaded. If successfull, we pass the polled
       cache: false,                            // data to processdata(). Next, we do the same thing iteratively with
       success: function(data) {
-        if (data) {console.log("data is something")}
-        else {div2.innerHTML = "No measurements are currently being made."}
+        if (data) {console.log("Data Exists")}
+        else {div2.innerHTML = "No measurements are currently being made. <br>" +
+                               "Please select a static map from the calendar menu to see older data"}
         processData(map, baseLayers, overlays, data);
       },
       error: function() {
@@ -260,8 +261,9 @@ function initializeMap() {
         cache: false,                             // behind the scenes. If successful, the information
         success: function(data) {                 // polled from datasource.txt is passed to the processData
           processData(map, baseLayers, overlays, data);     // function.
-          if (data) {console.log("data is something")}
-          else {div2.innerHTML = "No measurements are currently being made."}
+          if (data) {console.log("Data Exists")}
+          else {div2.innerHTML = "No measurements are currently being made. <br>" + 
+                                  "Please select a static map from the calendar menu to see older data"}
           processData(map, baseLayers, overlays, data);
         },
         error: function() {                       // If polling unsuccessful, return the following error
