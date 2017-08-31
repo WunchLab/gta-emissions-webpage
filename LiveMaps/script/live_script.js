@@ -1,3 +1,17 @@
+/* 
+****---------------------------------------------****
+Authors: Colin Arrowsmith, Sajjan Heerah, Debra Wunch
+
+This javascript provides the GTA Emissions website with interactive live mapping features.
+
+This script accesses a text file located at ~/GTA-Emissions/LiveMaps/datasource.txt
+using ajax and plots this data on an interactive map using the leaflet javascript plugin.
+
+Each variable is plotted as a mutually excusive layer. Different map tiles are also 
+used as overalys.
+****---------------------------------------------****
+*/
+
 
 // Get text to put in legend based on variable being plotted
 var txt2 = "2";
@@ -20,6 +34,7 @@ $(function() {
 
 //Define some Variables
 var pltNum = 120;                 //Number of data points to be plotted
+
 // "last updated" control
 var info = L.control({position:'bottomright'});
 var div2 = L.DomUtil.create('div', 'info');
@@ -33,6 +48,7 @@ var j = 1;
 
   
 function initializeMap() {
+  //List of facilities for overalay
   var targets = L.layerGroup();
     L.marker([43.648349, -79.386162]).addTo(targets).bindPopup("Pearl Power Station");
     L.marker([43.657632, -79.385199]).addTo(targets).bindPopup("Walton Steam Plant");
@@ -165,9 +181,7 @@ function initializeMap() {
     L.marker([43.7879406,-79.465363]).bindPopup("Connaught Campus, Manufacturing").addTo(targets);
     L.marker([43.7823886,-79.27643]).bindPopup("Agincourt Plant, Manufacturing").addTo(targets);                                    
 
-
-
-
+  // Variable layer groups
   var CH4_markers = L.layerGroup(),
       CO2_markers = L.layerGroup(),
       CO_markers = L.layerGroup(),
@@ -186,7 +200,7 @@ function initializeMap() {
   var grayscale   = L.tileLayer(mbUrl, {id: 'mapbox.light', attribution: mbAttr}),
       streets  = L.tileLayer(mbUrl, {id: 'mapbox.streets',   attribution: mbAttr}),
       satellite = L.tileLayer(mbUrl, {id: "mapbox.satellite", attribution: mbAttr});
-//      terrain = L.tileLayer(mbUrl, {id: "mapbox.mapbox-outdoors-v10", attribution: mbAttr});
+
 
 
   // Dictionary of base maps
@@ -242,9 +256,6 @@ function initializeMap() {
       url: "datasource.txt",                   // as soon as the page is loaded. If successfull, we pass the polled
       cache: false,                            // data to processdata(). Next, we do the same thing iteratively with
       success: function(data) {
-        if (data) {console.log("Data Exists")}
-        else {div2.innerHTML = "No measurements are currently being made. <br>" +
-                               "Please select a static map from the calendar menu to see older data"}
         processData(map, baseLayers, overlays, data);
       },
       error: function() {
@@ -261,10 +272,6 @@ function initializeMap() {
         cache: false,                             // behind the scenes. If successful, the information
         success: function(data) {                 // polled from datasource.txt is passed to the processData
           processData(map, baseLayers, overlays, data);     // function.
-          if (data) {console.log("Data Exists")}
-          else {div2.innerHTML = "No measurements are currently being made. <br>" + 
-                                  "Please select a static map from the calendar menu to see older data"}
-          processData(map, baseLayers, overlays, data);
         },
         error: function() {                       // If polling unsuccessful, return the following error
           console.log("Error encountered while polling data source.");
@@ -272,7 +279,7 @@ function initializeMap() {
         complete: pollDataSource                  // This calls the pollDataSource function again,
       });                                         // leading to an infinite loop.
     }, 20000);                                    // This is the argument passed to the 'setTimeout' function.
-  })();                                           // It simply inserts a 1000 ms time delay before
+  })();                                           // It simply inserts a 20000 ms time delay before
 }                                                 // the next polling call
 
 
@@ -312,7 +319,9 @@ function sigma(array) {
   return Math.sqrt(variance);
 };
 
+// This returns the median of the values in an array
 function median(arr){
+  // Parse the values into floats in case they are strings
   var arr = arr.map(function(num) {
       return parseFloat(num)
       });
@@ -320,6 +329,7 @@ function median(arr){
   var i = arr.length / 2;
   return i % 1 == 0 ? (arr[i - 1] + arr[i]) / 2 : arr[Math.floor(i)];
 }
+
 
 // Get the color of the dot to be plotted based on Max and Mins
 // Take the variable as an input to determine which scale to use.
@@ -371,7 +381,7 @@ info.update = function(data) {
         var dataComponents, time;
 
         for (var i = 2; l - i > -1; i++) {
-          
+          // if the last time is a nan, find the most recent valid time
           dataComponents = dataRows[l - i].split(",");
           if (dataComponents[0] === "nan") {
             continue;
@@ -422,7 +432,7 @@ function getDataArray(data, dataArrays, baseLayers) {
     var dataComponents = dataRows[i].split(",");
     var dataDict = {
             "timeStamp":      dataComponents[0],                          // call this the variable 'dataComponents'.
-            "latitude":       dataComponents[1],                         // We set a variable for each parameter in datasource.txt.
+            "latitude":       dataComponents[1],                          // We set a variable for each parameter in datasource.txt.
             "longitude":      dataComponents[2],
             "Temperature":    dataComponents[4],
             "windDirection":  dataComponents[5],
@@ -640,7 +650,10 @@ function processData(map, baseLayers, overlays, data) {
     }
     
     j = j + 1;
-  } else {div2.innerHTML = "There are currently no live measurements"
-  }  //Make info control say something if datasource.txt is empty
+  } else {
+          // Make info control say something if datasource.txt is empty
+          div2.innerHTML = "<b>No measurements are currently being made. </b><br>" +
+                           "Please select a static map from the calendar menu to see older data"
+  }  
 }
 
